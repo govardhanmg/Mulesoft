@@ -1,0 +1,86 @@
+//Movies database
+
+CREATE DATABASE Movie; 
+use Movie; 
+drop DATABASE Movie; 
+CREATE TABLE ACTOR( ACTID int, ACTOR VARCHAR(200), ACTRESS VARCHAR(200), PRIMARY KEY (ACTID)); 
+drop table ACTOR; DESC ACTOR;
+
+CREATE TABLE DIRECTOR( DID int, DIRNAME VARCHAR(20), PRIMARY KEY (DID)); 
+drop table DIRECTOR;
+
+CREATE TABLE MOVIES( MOVID int, MOVTITLE VARCHAR(25), MOVYEAR int, MOVLANG VARCHAR(12), DID int, PRIMARY KEY (MOVID), FOREIGN KEY (DID) REFERENCES DIRECTOR(DID));
+DESC MOVIES;
+drop table MOVIES;
+
+INSERT INTO ACTOR VALUES(301,'ANKUSHK','ABHINAYA'); 
+INSERT INTO ACTOR VALUES(302,'PRABHAS','ANUSHKA'); 
+INSERT INTO ACTOR VALUES(303,'PUNITH','SUKANYA'); 
+INSERT INTO ACTOR VALUES(304,'SUDEEP','LILLY');
+
+SELECT * FROM ACTOR;
+
+INSERT INTO DIRECTOR VALUES(60,'RAJAMOULI'); 
+INSERT INTO DIRECTOR VALUES(61,'HITCHCOCK'); 
+INSERT INTO DIRECTOR VALUES(62,'FARAN'); 
+INSERT INTO DIRECTOR VALUES(63,'STEVEN SPIELBERG');
+
+SELECT * FROM DIRECTOR;
+
+INSERT INTO MOVIES VALUES(1001,'KGF-2',2017,'TELUGU','60'); 
+INSERT INTO MOVIES VALUES(1002,'BAHUBALI-1',2015,'HINDI','61'); 
+INSERT INTO MOVIES VALUES(1003,'BHANG',2008,'KANADA','62'); 
+INSERT INTO MOVIES VALUES(1004,'WAR',2011,'ENGLISH','63');
+
+SELECT * FROM MOVIES;
+
+
+
+//Java program to connect to the the database
+
+package net.sqlitetutorial;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+
+public class Connect {
+     
+    public static void connect() {
+        Connection conn = null;
+        try {
+            // db parameters
+            String url = "jdbc:sqlite:C:/sqlite/db/Movies.db";
+            // create a connection to the database
+            conn = DriverManager.getConnection(url);
+            
+            System.out.println("Connection to SQLite has been established.");
+            Statement stmt = conn.createStatement();
+            
+            String sql = "INSERT INTO Movies VALUES ('Love Mocktail 2','Darling Krishna','Milana Nagaraj','Darling Krishna','2022')"; 
+            stmt.executeUpdate(sql);
+            sql = "SELECT * FROM Movies"; 
+            stmt.executeUpdate(sql);
+            
+            
+            System.out.println("Inserted");
+            
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        } finally {
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            }
+        }
+    }
+   
+    public static void main(String[] args) {
+        connect();
+    }
+}
